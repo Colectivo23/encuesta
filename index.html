@@ -486,7 +486,12 @@ var QUESTIONS = [
   ]}
 ];
 
-// ===== CONFIG GOOGLE SHEETS =====
+// ===== LINKS DE PROGRAMAS =====
+var LINKS = {
+  p10: 'https://hubs.ly/Q04jsvfr0',
+  p14: 'https://hubs.ly/Q04jsvjQ0',
+  bt:  'https://hubs.ly/Q04jsvk00'
+};
 var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx8pRzEhuby1TvJvgImw3LavTLzR2pysM8OPpR3evL8KJOF08KtVsnB__32rHWprm6b5g/exec';
 var TOKEN = 'C23-IA-DIAGNOSTICO-2025';
 
@@ -711,7 +716,18 @@ function showResult(winner, r10p, r14p, signals, showBt, btSignals, scores) {
       '<button class="btn-primary" style="padding:10px 24px;font-size:.85rem" onclick="showView(\'view-explore\')">Ver Bootcamp</button></div>'
     : '';
 
-  document.getElementById('result-body').innerHTML =
+  var other = isP14 ? 'p10' : 'p14';
+  var otherName = isP14 ? 'AI Tools for Business Strategy' : 'AI Agent Building';
+
+  var actionsHtml =
+    // Botón principal — programa recomendado
+    '<a href="'+LINKS[winner]+'" target="_blank" style="display:inline-block;background:linear-gradient(135deg,'+(isP14?'#1155FF,#27B9FF':'#7B3FF2,#9d57f5')+');color:#fff;border:none;border-radius:50px;padding:15px 36px;font-size:1rem;font-weight:700;text-decoration:none;transition:all .3s;box-shadow:0 8px 24px rgba(17,85,255,.3)">Ver programa '+(isP14?'AI Agent Building':'AI Tools for Business Strategy')+' →</a>'+
+    // Botones secundarios
+    '<div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:12px">'+
+      '<a href="'+LINKS[other]+'" target="_blank" style="display:inline-block;background:#fff;border:1.5px solid #d1d9f0;border-radius:50px;padding:11px 24px;font-size:.85rem;font-weight:600;color:var(--navy);text-decoration:none">Ver programa '+otherName+'</a>'+
+      '<a href="'+LINKS.bt+'" target="_blank" style="display:inline-block;background:#fff;border:1.5px solid #2EE6A6;border-radius:50px;padding:11px 24px;font-size:.85rem;font-weight:600;color:#0e7a59;text-decoration:none">Ver Bootcamp Productividad Laboral con IA</a>'+
+      '<a href="https://wa.link/qzfrgt" target="_blank" style="display:inline-block;background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;border:none;border-radius:50px;padding:11px 24px;font-size:.85rem;font-weight:700;text-decoration:none">💬 ¡Contacta con un asesor y obtén un descuento!</a>'+
+    '</div>';
     '<div id="save-status-wrap"></div>'+
     '<div class="result-main-card" style="border-top-color:'+color+'">'+
       '<h3 style="color:'+color+'">Compatibilidad estimada</h3>'+
@@ -721,10 +737,7 @@ function showResult(winner, r10p, r14p, signals, showBt, btSignals, scores) {
     '<div class="signals-card"><h4>🔍 Señales detectadas en tu perfil</h4>'+sigHtml+'</div>'+
     '<div class="signals-card"><h4>¿Qué desarrollarás?</h4>'+devHtml+'</div>'+
     btBlock+
-    '<div class="result-actions">'+
-      '<button class="btn-outline" onclick="showView(\'view-explore\')">← Volver a explorar</button>'+
-      '<button class="btn-primary" onclick="restartTest()">Reiniciar diagnóstico</button>'+
-    '</div>';
+    '<div class="result-actions">'+actionsHtml+'</div>';
 
   showView('view-result');
   setTimeout(function(){
