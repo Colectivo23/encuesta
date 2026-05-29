@@ -741,15 +741,17 @@ function showResult(winner, r10p, r14p, signals, showBt, btSignals, scores) {
 
   showView('view-result');
 
-  // Primero mostrar la vista, luego enviar y animar
   setTimeout(function(){
     setSaveStatus('saving');
     submitToSheets(lastPayload).then(function(r){ setSaveStatus(r.ok ? 'success' : 'failed'); });
+  }, 300);
+
+  setTimeout(function(){
     var b10 = document.getElementById('bar10');
     var b14 = document.getElementById('bar14');
     if(b10) b10.style.width = r10p+'%';
     if(b14) b14.style.width = r14p+'%';
-  }, 300);
+  }, 400);
 }
 
 // ===== ENVÍO A GOOGLE SHEETS =====
@@ -764,7 +766,7 @@ function submitToSheets(payload) {
 
 function setSaveStatus(state) {
   var wrap = document.getElementById('save-status-wrap');
-  if(!wrap) return;
+  if(!wrap) { setTimeout(function(){ setSaveStatus(state); }, 200); return; }
   if(state==='saving'){
     wrap.innerHTML='<div style="background:#fff;border-radius:14px;padding:14px 18px;box-shadow:0 4px 20px rgba(1,0,92,.08);margin-bottom:20px;display:flex;align-items:center;gap:12px;font-size:.85rem;border-left:4px solid #27B9FF"><div style="width:16px;height:16px;border:2px solid #e5e7eb;border-top-color:#27B9FF;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0"></div><div><strong style="display:block;margin-bottom:2px;color:var(--navy)">Guardando tu resultado…</strong><span style="color:var(--gray)">Estamos registrando tu diagnóstico.</span></div></div>';
   } else if(state==='success'){
