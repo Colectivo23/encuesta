@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnóstico IA — Colectivo23</title>
+<style>
+:root{--navy:#01005C;--blue:#1155FF;--cyan:#27B9FF;--purple:#7B3FF2;--mint:#2EE6A6;--bg:#F6F8FC;--gray:#485066;--p10:#7B3FF2;--bt:#2EE6A6;--p14:#1155FF}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--gray);overflow-x:hidden}
+.view{display:none;animation:fadeIn .35s ease}.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* HOME */
+.hero{background:linear-gradient(135deg,#07004D,#01005C,#1a0060,#0d1a4a);color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(123,63,242,.25),transparent 60%),radial-gradient(ellipse at 70% 30%,rgba(39,185,255,.15),transparent 50%);pointer-events:none}
+.hero-badge{display:inline-block;border:1px solid rgba(39,185,255,.5);border-radius:100px;padding:6px 18px;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan);margin-bottom:28px;background:rgba(39,185,255,.08)}
+.hero h1{font-size:clamp(2rem,5vw,3.4rem);font-weight:800;line-height:1.15;max-width:700px;margin-bottom:22px;background:linear-gradient(135deg,#fff,#c4d4ff,var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:clamp(.95rem,2vw,1.1rem);max-width:580px;line-height:1.7;color:rgba(255,255,255,.75);margin-bottom:40px}
+
+/* BOTONES */
+.btn-primary{background:linear-gradient(135deg,var(--purple),var(--blue),var(--cyan));border:none;border-radius:50px;padding:16px 40px;font-size:1rem;font-weight:700;color:#fff;cursor:pointer;transition:all .3s;box-shadow:0 8px 32px rgba(123,63,242,.4);font-family:inherit}
+.btn-primary:hover{transform:translateY(-3px)}
+.btn-ghost{background:transparent;border:1px solid rgba(255,255,255,.25);border-radius:50px;padding:7px 18px;color:rgba(255,255,255,.8);font-size:.82rem;cursor:pointer;font-family:inherit}
+.btn-ghost:hover{border-color:var(--cyan);color:var(--cyan)}
+.btn-outline{background:#fff;border:1.5px solid #d1d9f0;border-radius:50px;padding:13px 28px;font-size:.88rem;font-weight:600;color:var(--navy);cursor:pointer;font-family:inherit}
+.btn-outline:hover{border-color:var(--navy)}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(7,0,77,.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(39,185,255,.15);padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-size:.95rem;font-weight:800;color:#fff}.nav-logo span{color:var(--cyan)}
+.nav-actions{display:flex;gap:10px}
+.btn-nav{background:transparent;border:1px solid rgba(255,255,255,.25);border-radius:50px;padding:7px 18px;color:rgba(255,255,255,.8);font-size:.82rem;cursor:pointer;font-family:inherit}
+.btn-nav:hover{border-color:var(--cyan);color:var(--cyan)}
+.btn-nav.accent{background:linear-gradient(135deg,var(--purple),var(--blue));border:none;color:#fff;font-weight:700}
+
+/* SECTIONS */
+section{padding:80px 24px}
+.section-inner{max-width:1100px;margin:0 auto}
+.section-label{font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;color:var(--blue);font-weight:700;margin-bottom:12px}
+.section-title{font-size:clamp(1.6rem,3.5vw,2.3rem);font-weight:800;color:var(--navy);line-height:1.25;margin-bottom:14px}
+.section-sub{font-size:1rem;color:var(--gray);max-width:560px;line-height:1.65}
+
+/* PRODUCT CARDS */
+.products-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;margin-top:48px}
+.pcard{background:#fff;border-radius:20px;padding:32px;cursor:pointer;border:2px solid transparent;transition:all .3s;box-shadow:0 4px 20px rgba(1,0,92,.07);position:relative;overflow:hidden}
+.pcard::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;border-radius:20px 20px 0 0}
+.pcard.p10::before{background:linear-gradient(90deg,var(--p10),var(--purple))}.pcard.bt::before{background:linear-gradient(90deg,var(--bt),#1BC48E)}.pcard.p14::before{background:linear-gradient(90deg,var(--p14),var(--cyan))}
+.pcard:hover{transform:translateY(-6px);box-shadow:0 16px 48px rgba(1,0,92,.13)}
+.pcard.p10:hover{border-color:var(--p10)}.pcard.bt:hover{border-color:var(--bt)}.pcard.p14:hover{border-color:var(--p14)}
+.pcard-tag{display:inline-block;border-radius:100px;padding:4px 14px;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}
+.p10 .pcard-tag{background:rgba(123,63,242,.1);color:var(--p10)}.bt .pcard-tag{background:rgba(46,230,166,.12);color:#18a87a}.p14 .pcard-tag{background:rgba(17,85,255,.1);color:var(--p14)}
+.pcard-name{font-size:.95rem;font-weight:800;margin-bottom:16px}
+.p10 .pcard-name{color:var(--p10)}.bt .pcard-name{color:#18a87a}.p14 .pcard-name{color:var(--p14)}
+.pcard p{font-size:.9rem;color:var(--gray);line-height:1.6;margin-bottom:20px}
+.pcard-meta{display:flex;flex-direction:column;gap:8px}
+.meta-row{display:flex;align-items:flex-start;gap:8px;font-size:.82rem}
+.meta-label{font-weight:700;color:var(--navy);white-space:nowrap}.meta-val{color:var(--gray)}
+.pcard-hint{margin-top:20px;font-size:.8rem;font-weight:600}
+.p10 .pcard-hint{color:var(--p10)}.bt .pcard-hint{color:#18a87a}.p14 .pcard-hint{color:var(--p14)}
+.pcard-diff{margin-top:18px;display:flex;flex-wrap:wrap;gap:6px}
+.diff-chip{font-size:.75rem;padding:4px 12px;border-radius:100px;background:var(--bg)}
+
+/* MATURITY */
+.maturity-section{background:linear-gradient(135deg,#07004D,#01005C);padding:80px 24px 60px}
+.maturity-inner{max-width:1000px;margin:0 auto}
+.maturity-inner .section-title{color:#fff}.maturity-inner .section-sub{color:rgba(255,255,255,.7)}
+.maturity-header{margin-bottom:48px}
+.steps-wrapper{overflow-x:auto;padding-bottom:12px}
+.steps-track{display:flex;align-items:flex-end;gap:6px;min-width:600px}
+.step-col{flex:1;display:flex;flex-direction:column;align-items:center;cursor:pointer}
+.step-bar-wrap{width:100%;display:flex;flex-direction:column;align-items:center}
+.step-label-top{font-size:.72rem;font-weight:800;text-align:center;margin-bottom:6px;line-height:1.3;min-height:32px;display:flex;align-items:flex-end;justify-content:center;padding:0 4px}
+.step-bar{width:100%;border-radius:8px 8px 0 0;display:flex;align-items:center;justify-content:center;transition:filter .2s}
+.step-col:hover .step-bar{filter:brightness(1.12)}
+.step-num{font-size:2rem;font-weight:900;color:rgba(255,255,255,.9);line-height:1}
+.step-bottom-label{font-size:.68rem;font-weight:600;text-align:center;margin-top:10px;line-height:1.4;color:rgba(255,255,255,.65);padding:0 2px}
+.bands-wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:20px;border-top:1px solid rgba(255,255,255,.15)}
+.band{padding:16px 10px 10px;border-right:1px solid rgba(255,255,255,.12)}.band:last-child{border-right:none}
+.band-arrow{display:flex;align-items:center;margin-bottom:8px}
+.band-arrow-line{flex:1;height:2px;background:var(--cyan);opacity:.7}
+.band-arrow-head-l,.band-arrow-head-r{font-size:.9rem;color:var(--cyan);line-height:1;flex-shrink:0}
+.band-title{font-size:.82rem;font-weight:800;color:#fff;margin-bottom:5px}
+.band-sub{font-size:.73rem;color:rgba(255,255,255,.6);line-height:1.4;margin-bottom:8px}
+.band-level{display:inline-block;font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--cyan);border:1px solid rgba(39,185,255,.35);border-radius:100px;padding:2px 10px}
+@media(max-width:700px){.bands-wrap{grid-template-columns:repeat(2,1fr)}.band:nth-child(2){border-right:none}.band:nth-child(3){border-top:1px solid rgba(255,255,255,.12)}.band:nth-child(4){border-top:1px solid rgba(255,255,255,.12);border-right:none}}
+.step-legend{display:flex;justify-content:center;gap:24px;margin-top:36px;flex-wrap:wrap}
+.leg-item{display:flex;align-items:center;gap:8px;font-size:.82rem;color:rgba(255,255,255,.75)}
+.leg-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0}
+
+/* STEP TOOLTIP */
+.modal-overlay{position:fixed;inset:0;background:rgba(7,0,77,.6);backdrop-filter:blur(6px);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal{background:#fff;border-radius:24px;max-width:600px;width:100%;max-height:90vh;overflow-y:auto;position:relative;box-shadow:0 32px 80px rgba(1,0,92,.25);animation:slideUp .3s ease}
+@keyframes slideUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal-close{position:absolute;top:16px;right:16px;background:var(--bg);border:none;border-radius:50%;width:34px;height:34px;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--gray);font-family:inherit}
+.modal-close:hover{background:var(--navy);color:#fff}
+.modal-inner{padding:32px}
+.modal-tag{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.modal-inner h3{font-size:1.15rem;font-weight:800;color:var(--navy);margin-bottom:12px}
+.modal-inner p{font-size:.9rem;color:var(--gray);line-height:1.65;margin-bottom:10px}
+.modal-inner ul{list-style:none;padding-left:0;margin-bottom:12px}
+.modal-inner ul li{font-size:.88rem;color:var(--gray);padding:5px 0;border-bottom:1px solid #f3f4f6;line-height:1.5}
+.modal-inner ul li:last-child{border:none}
+.modal-block{border-left:3px solid #e5e9f4;padding-left:14px;margin-bottom:12px}
+.modal-block.colored{border-left-color:var(--blue)}
+.modal-block-label{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
+
+/* COMPARISON */
+.comp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;margin-top:48px}
+.comp-card{border-radius:18px;padding:28px;border:1.5px solid #edf0f7;transition:all .25s}
+.comp-card:hover{border-color:var(--blue);box-shadow:0 8px 30px rgba(17,85,255,.1)}
+.comp-card-tag{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px;display:block}
+.comp-card-name{font-size:1rem;font-weight:800;margin-bottom:6px}
+.comp-card h3{font-size:1.3rem;font-weight:800;margin-bottom:12px}
+.comp-desc{font-size:.88rem;color:var(--gray);line-height:1.6;margin-bottom:16px}
+.comp-ideal{font-size:.82rem;border-radius:10px;padding:10px 14px;line-height:1.5;margin-bottom:10px}
+.comp-result{font-size:.8rem;font-weight:600}
+.cc-p10{border-top:3px solid var(--p10)}.cc-p10 .comp-card-tag,.cc-p10 .comp-card-name{color:var(--p10)}.cc-p10 .comp-ideal{background:rgba(123,63,242,.06)}
+.cc-bt{border-top:3px solid var(--bt)}.cc-bt .comp-card-tag,.cc-bt .comp-card-name{color:#18a87a}.cc-bt .comp-ideal{background:rgba(46,230,166,.07)}
+.cc-p14{border-top:3px solid var(--p14)}.cc-p14 .comp-card-tag,.cc-p14 .comp-card-name{color:var(--p14)}.cc-p14 .comp-ideal{background:rgba(17,85,255,.06)}
+
+/* CTA */
+.cta-dark{background:linear-gradient(135deg,#07004D,#01005C,#160057);color:#fff;text-align:center;padding:80px 24px}
+.cta-dark h2{font-size:clamp(1.6rem,3.5vw,2.2rem);font-weight:800;margin-bottom:16px}
+.cta-dark p{font-size:1rem;opacity:.78;max-width:500px;margin:0 auto 36px;line-height:1.65}
+
+/* FORM (registro) */
+.form-wrap{max-width:520px;margin:0 auto;padding:40px 20px 60px}
+.form-header{text-align:center;margin-bottom:32px}
+.form-header .step-badge{display:inline-block;background:#ede9fe;color:var(--p10);font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 14px;border-radius:20px;margin-bottom:14px}
+.form-header h2{font-size:1.4rem;font-weight:800;margin-bottom:8px;color:var(--navy)}
+.form-header p{font-size:.88rem;color:var(--gray);line-height:1.5}
+.form-card{background:#fff;border-radius:20px;padding:28px;box-shadow:0 4px 24px rgba(1,0,92,.08)}
+.form-row{margin-bottom:18px}
+.form-row label{display:block;font-size:.82rem;font-weight:700;margin-bottom:6px;color:var(--navy)}
+.form-row label .req{color:var(--p10)}
+.form-row label .opt{color:var(--gray);font-weight:400;font-size:.75rem}
+.form-row input[type=text],.form-row input[type=email]{width:100%;padding:11px 14px;border:2px solid #edf0f7;border-radius:12px;font-size:.92rem;font-family:inherit;color:var(--navy);transition:border-color .2s;background:var(--bg)}
+.form-row input:focus{outline:none;border-color:var(--blue);background:#fff}
+.form-row input.error{border-color:#ef4444}
+.consent-row{background:#faf7ff;border:2px solid #ede9fe;border-radius:12px;padding:16px;margin-top:8px}
+.consent-row label{display:flex;gap:12px;align-items:flex-start;cursor:pointer;font-size:.82rem;color:var(--gray);line-height:1.5;font-weight:400}
+.consent-row input[type=checkbox]{width:18px;height:18px;flex-shrink:0;margin-top:2px;accent-color:var(--blue);cursor:pointer}
+.field-error{color:#ef4444;font-size:.75rem;margin-top:4px;display:none}
+.form-submit-row{margin-top:24px}
+
+/* QUIZ */
+.test-wrap{max-width:640px;margin:0 auto;padding:32px 20px 60px}
+.progress-bar-wrap{margin-bottom:28px}
+.progress-info{display:flex;justify-content:space-between;font-size:.75rem;color:var(--gray);margin-bottom:8px;font-weight:600}
+.progress-track{height:6px;background:#edf0f7;border-radius:99px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--blue),var(--cyan));border-radius:99px;transition:width .4s ease}
+.question-card{background:#fff;border-radius:20px;padding:32px;box-shadow:0 4px 24px rgba(1,0,92,.08);margin-bottom:24px}
+.question-num{font-size:.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.question-text{font-size:1.15rem;font-weight:800;line-height:1.4;margin-bottom:24px;color:var(--navy)}
+.options-list{display:flex;flex-direction:column;gap:10px}
+.option-btn{background:var(--bg);border:2px solid #edf0f7;border-radius:14px;padding:14px 18px;font-size:.92rem;text-align:left;cursor:pointer;transition:all .2s;display:flex;gap:12px;align-items:flex-start;line-height:1.4;color:var(--gray);font-family:inherit;width:100%}
+.option-btn:hover{border-color:var(--blue);background:#f0f4ff;color:var(--navy)}
+.option-btn.selected{border-color:var(--blue);background:linear-gradient(135deg,rgba(17,85,255,.08),rgba(39,185,255,.06));color:var(--navy);font-weight:600}
+.test-nav{display:flex;gap:12px;justify-content:space-between}
+.btn-back-q{background:#fff;border:2px solid #edf0f7;border-radius:50px;padding:11px 24px;font-size:.88rem;font-weight:600;cursor:pointer;font-family:inherit;color:var(--gray)}
+.btn-back-q:hover{border-color:var(--navy);color:var(--navy)}
+.btn-next-q{background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;border:none;border-radius:50px;padding:11px 28px;font-size:.9rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s}
+.btn-next-q:hover{opacity:.88}
+.btn-next-q:disabled{opacity:.35;cursor:not-allowed}
+
+/* RESULT */
+.result-hero{padding:60px 24px 80px;text-align:center;color:#fff;position:relative;overflow:hidden}
+.result-hero::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:60px;background:var(--bg);clip-path:ellipse(55% 100% at 50% 100%)}
+.result-badge{display:inline-block;border-radius:100px;padding:5px 16px;font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px}
+.result-hero h2{font-size:clamp(1.5rem,3.5vw,2.2rem);font-weight:800;margin-bottom:8px;max-width:620px;margin-left:auto;margin-right:auto;line-height:1.25}
+.result-body{max-width:760px;margin:0 auto;padding:40px 20px 60px;position:relative;z-index:2}
+.result-main-card{background:#fff;border-radius:20px;padding:28px;box-shadow:0 8px 40px rgba(0,0,0,.1);margin-bottom:20px;border-top:4px solid}
+.result-main-card h3{font-size:1.1rem;font-weight:800;margin-bottom:10px}
+.result-main-card p{font-size:.9rem;color:var(--gray);line-height:1.6;margin-bottom:14px}
+.signals-card,.compare-card,.bt-card{background:#fff;border-radius:20px;padding:24px;box-shadow:0 4px 24px rgba(1,0,92,.07);margin-bottom:20px}
+.signals-card h4,.compare-card h4{font-size:.95rem;font-weight:700;margin-bottom:16px;color:var(--navy)}
+.signal-item{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid #f3f4f6;font-size:.88rem;line-height:1.4;color:var(--gray)}
+.signal-item:last-child{border:none}
+.signal-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.compare-bar-row{margin-bottom:14px}
+.compare-bar-label{display:flex;justify-content:space-between;font-size:.85rem;font-weight:600;margin-bottom:6px;color:var(--navy)}
+.compare-track{height:10px;background:#edf0f7;border-radius:99px;overflow:hidden}
+.compare-fill{height:100%;border-radius:99px;transition:width 1s ease}
+.bt-card{border:2px solid var(--bt)}
+.bt-card-header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.bt-icon{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--bt),#1BC48E);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.bt-card h4{font-size:.95rem;font-weight:800;color:#0e7a59}
+.bt-card p{font-size:.88rem;color:var(--gray);line-height:1.65;margin-bottom:14px}
+.result-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:640px){section{padding:60px 16px}nav{padding:12px 16px}.test-nav{flex-direction:column}.btn-back-q,.btn-next-q{width:100%;text-align:center}}
+</style>
+</head>
+<body>
+
+<!-- VIEW: EXPLORE -->
+<div id="view-explore" class="view active">
+  <div class="hero">
+    <div class="hero-badge">Diagnóstico de Programas IA</div>
+    <h1>Descubre tu camino en Inteligencia Artificial</h1>
+    <p>Explora las diferencias entre nuestros programas de IA y descubre cuál se ajusta mejor a tu nivel, objetivo y forma de aprender.</p>
+    <button class="btn-primary" onclick="showView('view-explore'); document.querySelector('.explore-section').scrollIntoView({behavior:'smooth'})">Explorar programas ↓</button>
+  </div>
+
+  <nav>
+    <div class="nav-logo">Colectivo<span>23</span></div>
+    <div class="nav-actions">
+      <button class="btn-nav" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Inicio</button>
+      <button class="btn-nav accent" onclick="showView('view-form')">Hacer diagnóstico</button>
+    </div>
+  </nav>
+
+  <section class="explore-section">
+    <div class="section-inner">
+      <div class="section-label">Ecosistema de Aprendizaje</div>
+      <h2 class="section-title">El ecosistema de aprendizaje en IA</h2>
+      <p class="section-sub">Haz clic en cada programa para conocer su foco, nivel de entrada y resultado esperado.</p>
+      <div class="products-grid">
+        <div class="pcard p10" onclick="openModal('p10')">
+          <span class="pcard-tag">Programa</span><div class="pcard-name">AI Tools &amp; Tech Mindset</div>
+          <p>Entiende IA generativa, usa herramientas con criterio y diseña una propuesta de innovación aplicable.</p>
+          <div class="pcard-meta">
+            <div class="meta-row"><span class="meta-label">Nivel:</span><span class="meta-val">Cero base / Explorador</span></div>
+            <div class="meta-row"><span class="meta-label">Output:</span><span class="meta-val">Propuesta de innovación con IA</span></div>
+            <div class="meta-row"><span class="meta-label">Escalones:</span><span class="meta-val">1–3: exploración, confianza y primera aplicación</span></div>
+          </div>
+          <div class="pcard-diff"><span class="diff-chip">Fundamentos de IA</span><span class="diff-chip">Prompting</span><span class="diff-chip">Criterios de uso</span><span class="diff-chip">Propuesta + piloto</span></div>
+          <div class="pcard-hint">Ver detalle →</div>
+        </div>
+        <div class="pcard bt" onclick="openModal('bt')">
+          <span class="pcard-tag">Bootcamp</span><div class="pcard-name">Productividad Laboral con IA</div>
+          <p>Aprende una automatización básica en n8n para mejorar tu productividad individual de forma rápida.</p>
+          <div class="pcard-meta">
+            <div class="meta-row"><span class="meta-label">Nivel:</span><span class="meta-val">Sin requisitos previos</span></div>
+            <div class="meta-row"><span class="meta-label">Output:</span><span class="meta-val">Automatización básica funcional</span></div>
+            <div class="meta-row"><span class="meta-label">Escalones:</span><span class="meta-val">3–4: aplicación práctica e intro a automatización</span></div>
+          </div>
+          <div class="pcard-diff"><span class="diff-chip">Experiencia corta</span><span class="diff-chip">n8n básico</span><span class="diff-chip">Productividad individual</span></div>
+          <div class="pcard-hint">Ver detalle →</div>
+        </div>
+        <div class="pcard p14" onclick="openModal('p14')">
+          <span class="pcard-tag">Programa</span><div class="pcard-name">AI Agent Building</div>
+          <p>Diseña, prototipa e integra agentes de automatización en procesos reales con impacto medible.</p>
+          <div class="pcard-meta">
+            <div class="meta-row"><span class="meta-label">Nivel:</span><span class="meta-val">Usuario activo de IA / Explorador avanzado</span></div>
+            <div class="meta-row"><span class="meta-label">Output:</span><span class="meta-val">Agente o workflow funcional</span></div>
+            <div class="meta-row"><span class="meta-label">Escalones:</span><span class="meta-val">4–6: integración, automatización y arquitectura</span></div>
+          </div>
+          <div class="pcard-diff"><span class="diff-chip">Procesos automatizables</span><span class="diff-chip">Workflows + agentes</span><span class="diff-chip">Métricas + gobernanza</span></div>
+          <div class="pcard-hint">Ver detalle →</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="maturity-section">
+    <div class="maturity-inner">
+      <div class="maturity-header">
+        <div class="section-label" style="color:var(--cyan)">Co23 Framework</div>
+        <h2 class="section-title">Mapa de Capacidades e Impacto en IA</h2>
+        <p class="section-sub">Haz clic en cada escalón para conocer sus capacidades y qué programa lo cubre.</p>
+      </div>
+      <div class="steps-wrapper"><div class="steps-track" id="stepsTrack"></div></div>
+      <div class="bands-wrap">
+        <div class="band"><div class="band-arrow"><span class="band-arrow-head-l">◄</span><div class="band-arrow-line"></div><span class="band-arrow-head-r">►</span></div><div class="band-title">Exploración y confianza</div><div class="band-sub">Comprensión básica y primeros usos</div><div class="band-level">Personal</div></div>
+        <div class="band"><div class="band-arrow"><span class="band-arrow-head-l">◄</span><div class="band-arrow-line"></div><span class="band-arrow-head-r">►</span></div><div class="band-title">Eficiencia y aplicación</div><div class="band-sub">Uso funcional y estructuración de procesos</div><div class="band-level">Operativo</div></div>
+        <div class="band"><div class="band-arrow"><span class="band-arrow-head-l">◄</span><div class="band-arrow-line"></div><span class="band-arrow-head-r">►</span></div><div class="band-title">Automatización y criterio</div><div class="band-sub">Toma de decisiones, integración y diseño híbrido</div><div class="band-level">Estratégico</div></div>
+        <div class="band"><div class="band-arrow"><span class="band-arrow-head-l">◄</span><div class="band-arrow-line"></div><span class="band-arrow-head-r">►</span></div><div class="band-title">Escalabilidad y liderazgo</div><div class="band-sub">Impacto organizacional e innovación avanzada</div><div class="band-level">Organizacional</div></div>
+      </div>
+      <div class="step-legend">
+        <div class="leg-item"><div class="leg-dot" style="background:linear-gradient(135deg,#4e2bb5,#7B3FF2)"></div>Programa AI Tools — Escalones 1–3</div>
+        <div class="leg-item"><div class="leg-dot" style="background:linear-gradient(135deg,#2EE6A6,#1BC48E)"></div>Bootcamp — Escalones 3–4</div>
+        <div class="leg-item"><div class="leg-dot" style="background:linear-gradient(135deg,#1155FF,#27B9FF)"></div>Programa AI Agent — Escalones 4–6</div>
+      </div>
+    </div>
+  </div>
+
+  <section>
+    <div class="section-inner">
+      <div class="section-label">Comparativa</div>
+      <h2 class="section-title">Los tres programas en resumen</h2>
+      <div class="comp-grid">
+        <div class="comp-card cc-p10"><span class="comp-card-tag">Programa</span><div class="comp-card-name">AI Tools &amp; Tech Mindset</div><h3>Propuesta de innovación</h3><p class="comp-desc">Diseña una propuesta de innovación con IA.</p><div class="comp-ideal"><strong>Ideal para:</strong> Quienes empiezan o necesitan ordenar fundamentos.</div><div class="comp-result">✦ Propuesta + piloto + gobernanza básica</div></div>
+        <div class="comp-card cc-bt"><span class="comp-card-tag">Bootcamp</span><div class="comp-card-name">Productividad Laboral con IA</div><h3>Automatización básica</h3><p class="comp-desc">Automatiza una tarea puntual en n8n.</p><div class="comp-ideal"><strong>Ideal para:</strong> Quienes buscan algo corto, práctico e inmediato.</div><div class="comp-result">✦ Automatización básica funcional</div></div>
+        <div class="comp-card cc-p14"><span class="comp-card-tag">Programa</span><div class="comp-card-name">AI Agent Building</div><h3>Agentes y workflows</h3><p class="comp-desc">Construye agentes y workflows con IA.</p><div class="comp-ideal"><strong>Ideal para:</strong> Quienes ya usan IA y quieren automatizar procesos.</div><div class="comp-result">✦ Agente o flujo funcional con impacto medible</div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-dark">
+    <div class="section-label" style="color:var(--cyan);text-align:center">Diagnóstico Personalizado</div>
+    <h2>¿Cuál es tu mejor camino en IA?</h2>
+    <p>Responde 10 preguntas y descubre qué programa se ajusta mejor a tu perfil hoy.</p>
+    <button class="btn-primary" onclick="showView('view-form')">Conoce tu recomendación →</button>
+  </div>
+</div>
+
+<!-- VIEW: FORM (registro) -->
+<div id="view-form" class="view">
+  <div style="background:linear-gradient(160deg,#07004D,#01005C);min-height:100vh">
+    <div style="padding:18px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.1)">
+      <div class="nav-logo">Colectivo<span>23</span></div>
+      <button class="btn-ghost" onclick="showView('view-explore')">← Volver</button>
+    </div>
+    <div class="form-wrap">
+      <div class="form-header">
+        <div class="step-badge">Paso 1 de 2 — Tu información</div>
+        <h2>Antes de comenzar, cuéntanos quién eres</h2>
+        <p>Completa estos datos para personalizar tu experiencia y recibir tu recomendación.</p>
+      </div>
+      <div class="form-card">
+        <div class="form-row">
+          <label>Nombre completo <span class="req">*</span></label>
+          <input type="text" id="f-nombre" placeholder="Ej. Ana García">
+          <div class="field-error" id="err-nombre">Por favor ingresa tu nombre.</div>
+        </div>
+        <div class="form-row">
+          <label>Correo electrónico <span class="req">*</span></label>
+          <input type="email" id="f-email" placeholder="Ej. ana@empresa.com">
+          <div class="field-error" id="err-email">Por favor ingresa un email válido.</div>
+        </div>
+        <div class="form-row">
+          <label>Empresa u organización <span class="opt">(opcional)</span></label>
+          <input type="text" id="f-empresa" placeholder="Nombre de tu empresa">
+        </div>
+        <div class="form-row">
+          <label>Cargo o rol <span class="opt">(opcional)</span></label>
+          <input type="text" id="f-cargo" placeholder="Tu cargo actual">
+        </div>
+        <div class="consent-row">
+          <label>
+            <input type="checkbox" id="f-consent">
+            <span>Acepto que Colectivo23 utilice mis datos para enviarme información sobre sus programas.</span>
+          </label>
+          <div class="field-error" id="err-consent">Debes aceptar el consentimiento para continuar.</div>
+        </div>
+        <div class="form-submit-row">
+          <button class="btn-primary" style="width:100%;font-size:.95rem;padding:14px" onclick="submitForm()">Comenzar diagnóstico →</button>
+        </div>
+      </div>
+      <p style="text-align:center;margin-top:16px">
+        <button class="btn-ghost" onclick="showView('view-explore')">← Volver a explorar</button>
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW: TEST -->
+<div id="view-test" class="view">
+  <div style="background:linear-gradient(160deg,#07004D,#01005C);min-height:100vh">
+    <div style="padding:18px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.1)">
+      <div class="nav-logo">Colectivo<span>23</span></div>
+      <button class="btn-ghost" onclick="restartTest()">✕ Reiniciar</button>
+    </div>
+    <div class="test-wrap">
+      <div class="progress-bar-wrap">
+        <div class="progress-info">
+          <span id="q-counter">Pregunta 1 de 10</span>
+          <span id="q-pct">10%</span>
+        </div>
+        <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:10%"></div></div>
+      </div>
+      <div class="question-card">
+        <div class="question-num" id="q-num">Pregunta 1</div>
+        <div class="question-text" id="q-text"></div>
+        <div class="options-list" id="options-list"></div>
+      </div>
+      <div class="test-nav">
+        <button class="btn-back-q" id="btn-back" onclick="prevQ()">← Atrás</button>
+        <button class="btn-next-q" id="btn-next" onclick="nextQ()" disabled>Siguiente →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW: RESULT -->
+<div id="view-result" class="view">
+  <div class="result-hero" id="result-hero"></div>
+  <div class="result-body" id="result-body"></div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModalForce()">✕</button>
+    <div class="modal-inner" id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+// ===== DATOS =====
+var PRODUCTS = {
+  p10:{tag:'Programa',name:'AI Tools & Tech Mindset',color:'#7B3FF2',
+    forWho:'Profesionales de negocio, líderes o equipos que parten desde cero o nivel explorador en IA. Buscan entender la tecnología, usar herramientas generativas con criterio y formular una primera propuesta de innovación aplicable.',
+    learn:['Entender fundamentos de IA generativa.','Crear prompts efectivos.','Usar herramientas de IA para idear, analizar y comunicar.','Priorizar oportunidades con impacto/esfuerzo.','Diseñar una propuesta de innovación con IA.'],
+    build:'Una propuesta de innovación con IA que incluye problemática, solución, herramientas a usar, pequeño piloto y gobernanza básica.',
+    notIs:'No es un programa para construir agentes funcionales complejos ni automatizaciones conectadas a procesos empresariales.'},
+  bt:{tag:'Bootcamp',name:'Productividad Laboral con IA',color:'#18a87a',
+    forWho:'Personas que buscan una experiencia corta, práctica e inmediata para aprender a construir una automatización básica con IA orientada a productividad individual.',
+    learn:['Entender una lógica básica de automatización.','Usar n8n en un flujo guiado.','Conectar pasos simples.','Automatizar una tarea puntual.','Ganar confianza práctica rápidamente.'],
+    build:'Una automatización básica funcional en n8n, construida sobre un caso de uso propuesto y guiado por Colectivo23.',
+    notIs:'No reemplaza un programa completo. No profundiza en estrategia, gobernanza ni arquitectura de agentes.'},
+  p14:{tag:'Programa',name:'AI Agent Building',color:'#1155FF',
+    forWho:'Profesionales que ya usan IA y quieren pasar de experimentar con herramientas a diseñar agentes integrados a flujos reales.',
+    learn:['Identificar procesos automatizables.','Diseñar flujos y arquitectura de agentes.','Conectar herramientas, datos y pasos de proceso.','Construir agentes o workflows funcionales.','Medir impacto operativo y definir gobernanza.'],
+    build:'Un agente de automatización o workflow funcional con IA. Cada grupo trabajará casos propuestos según sus perfiles como base de aprendizaje, para luego adaptarlos a su contexto.',
+    notIs:'No es una introducción básica a IA ni promete agentes autónomos avanzados, machine learning profundo o sistemas enterprise-grade.'}
+};
+
+var STEPS = [
+  {n:1,label:'Principiante curioso',prog:'AI Tools',progColor:'#7B3FF2',subtitle:'Alfabetización digital e IA awareness',desc:'Primeros pasos con la IA.',entrada:'Quiere entender cómo funciona la IA, perder el miedo y empezar a usarla con confianza.',salida:'Comprender los fundamentos de la IA, distinguir entre mito y realidad, y reconocer oportunidades básicas de aplicación.',grad:'linear-gradient(to top,#3b1f9e,#7B3FF2)',h:60},
+  {n:2,label:'Aprendiz activo',prog:'AI Tools',progColor:'#7B3FF2',subtitle:'Prompting efectivo y colaboración con IA',desc:'Ya usa la IA en tareas básicas, pero sin resultados consistentes.',entrada:'Busca mejorar su comunicación con la IA y aprovecharla para ser más productivo.',salida:'Usar herramientas de IA en tareas simples y mejorar resultados mediante prompts efectivos.',grad:'linear-gradient(to top,#3b1f9e,#7B3FF2)',h:95},
+  {n:3,label:'Implementador inicial',prog:'AI Tools / Bootcamp',progColor:'#2EE6A6',subtitle:'Aplicación con herramientas de IA',desc:'Está dando sus primeros pasos con la IA.',entrada:'Quiere entender cómo funciona y empezar a usarla con confianza.',salida:'Experimentar con distintas herramientas de IA e identificar cómo generar eficiencia y valor operativo real.',grad:'linear-gradient(to top,#2563c4,#2EE6A6)',h:130},
+  {n:4,label:'Conector funcional',prog:'Bootcamp / AI Agent',progColor:'#27B9FF',subtitle:'Integración y automatización simple',desc:'Explora automatizaciones y flujos simples; todavía no entiende cómo integrar herramientas o usar APIs.',entrada:'Busca dominar la estructura detrás de los procesos para conectar la IA con su trabajo.',salida:'Diseñar flujos de trabajo simples e integrar herramientas mediante automatizaciones básicas.',grad:'linear-gradient(to top,#1155FF,#27B9FF)',h:160},
+  {n:5,label:'Estratega automatizador',prog:'AI Agent',progColor:'#27B9FF',subtitle:'Sistemas de decisión automatizados',desc:'Empieza a crear automatizaciones más inteligentes.',entrada:'Quiere desarrollar sistemas que aporten eficiencia a su equipo o área.',salida:'Implementar automatizaciones con reglas y decisiones simples para optimizar la eficiencia del equipo.',grad:'linear-gradient(to top,#0d3fd4,#27B9FF)',h:192},
+  {n:6,label:'Arquitecto colaborativo',prog:'AI Agent',progColor:'#27B9FF',subtitle:'Diseño de flujos y soluciones IA integradas',desc:'Comprende el potencial de la IA, pero aún no diseña soluciones escalables.',entrada:'Quiere integrar tecnología, negocio y personas en procesos híbridos sostenibles.',salida:'Diseñar soluciones híbridas donde humanos e IA colaboran, alineadas con los objetivos organizacionales.',grad:'linear-gradient(to top,#0930b0,#1155FF)',h:222},
+  {n:7,label:'Diseñador organizacional',prog:'Avanzado',progColor:'#27B9FF',subtitle:'Agentes de automatización funcional',desc:'Aplica IA en su trabajo, pero busca mayor alcance e impacto transversal.',entrada:'Quiere automatizar procesos de forma más inteligente y medible.',salida:'Implementar la IA en procesos empresariales, medir su impacto y escalar soluciones que generen eficiencia.',grad:'linear-gradient(to top,#061f8a,#1044dd)',h:252},
+  {n:8,label:'Visionario tecnológico',prog:'Avanzado',progColor:'#2EE6A6',subtitle:'Agentes cognitivos y autónomos',desc:'Mirada estratégica sobre la IA y aspira a liderar su adopción.',entrada:'Busca crear soluciones avanzadas que impulsen innovación y autonomía tecnológica.',salida:'Liderar estrategias avanzadas de IA y promover innovación y ventaja competitiva sostenible.',grad:'linear-gradient(to top,#04115e,#0930b0)',h:282}
+];
+
+var QUESTIONS = [
+  {q:'¿Con qué frecuencia usas herramientas de IA en tu trabajo?',opts:[
+    {t:'Nunca o casi nunca.',s:{p10:3},sig:'Estás en una etapa inicial de exploración.'},
+    {t:'Algunas veces, principalmente por curiosidad.',s:{p10:3},sig:'Has tenido contacto con IA, pero aún necesitas estructura.'},
+    {t:'Varias veces por semana para tareas concretas.',s:{p14:2},sig:'Ya usas IA con cierta frecuencia en tu trabajo.'},
+    {t:'Todos los días o casi todos los días para mejorar mi productividad.',s:{p14:3},sig:'Tienes un uso activo de IA y puedes avanzar hacia automatización.'}
+  ]},
+  {q:'¿Cómo describirías tu uso actual de IA?',opts:[
+    {t:'La uso como buscador o para hacer preguntas simples.',s:{p10:3},sig:'Tu uso actual todavía es exploratorio.'},
+    {t:'La uso para redactar, resumir o generar ideas.',s:{p10:3},sig:'Ya usas IA generativa, pero desde tareas base.'},
+    {t:'La uso para mejorar tareas específicas de mi trabajo.',s:{p14:2},sig:'Ya conectas IA con tareas concretas de tu rol.'},
+    {t:'La uso para estructurar procesos, analizar información o automatizar partes de mi flujo.',s:{p14:3},sig:'Tu uso ya se acerca a procesos y automatización.'}
+  ]},
+  {q:'¿Qué tan cómodo/a te sientes con conceptos básicos de IA generativa?',opts:[
+    {t:'No sé bien qué es IA generativa, prompting o modelos de lenguaje.',s:{p10:3},sig:'Necesitas construir fundamentos desde la base.'},
+    {t:'He escuchado los conceptos, pero no los manejo con seguridad.',s:{p10:3},sig:'Necesitas ordenar y consolidar conceptos clave.'},
+    {t:'Entiendo los conceptos básicos y los uso en algunas tareas.',s:{p14:2},sig:'Ya tienes una base funcional para avanzar.'},
+    {t:'Entiendo cómo funcionan a nivel general y puedo explicar casos de uso a otros.',s:{p14:3},sig:'Puedes pasar de uso individual a diseño de soluciones.'}
+  ]},
+  {q:'¿Qué tipo de experiencia estás buscando hoy?',opts:[
+    {t:'Algo práctico, rápido e inmediato: aprender una automatización básica para mejorar mi productividad.',s:{bt:5},bt:true,sig:'Buscas una experiencia corta, práctica e inmediata.'},
+    {t:'Un programa para ordenar mi criterio: entender IA, herramientas y estrategia.',s:{p10:5},sig:'Buscas criterio, estructura y propuesta estratégica.'},
+    {t:'Un programa para construir soluciones: diseñar un agente o automatización real.',s:{p14:5},sig:'Buscas construcción funcional e integración con procesos.'}
+  ]},
+  {q:'¿Puedes identificar procesos repetitivos que podrían automatizarse en tu trabajo?',opts:[
+    {t:'No, todavía no sé cómo identificar oportunidades de automatización.',s:{p10:3},sig:'Necesitas aprender a identificar oportunidades de aplicación.'},
+    {t:'Tengo algunas ideas, pero no sé si son viables.',s:{p10:3},sig:'Necesitas criterios para evaluar factibilidad e impacto.'},
+    {t:'Sí, puedo identificar tareas repetitivas o flujos manuales.',s:{p14:2},sig:'Ya reconoces oportunidades de automatización.'},
+    {t:'Sí, puedo describir entradas, pasos, responsables y resultados esperados del proceso.',s:{p14:3},sig:'Puedes pensar en procesos con suficiente estructura.'}
+  ]},
+  {q:'¿Has usado alguna herramienta no-code, de automatización o workflow?',opts:[
+    {t:'No he usado ninguna, pero me interesa aprender algo práctico desde cero.',s:{bt:3},bt:true,sig:'Podrías beneficiarte de una práctica guiada e inmediata.'},
+    {t:'He visto o probado alguna, pero muy poco.',s:{p10:2},sig:'Todavía estás en exploración de herramientas.'},
+    {t:'He creado algo simple o configurado flujos básicos.',s:{p14:2},sig:'Ya tienes experiencia inicial con flujos.'},
+    {t:'Ya he creado automatizaciones, asistentes o flujos conectando herramientas.',s:{p14:3},sig:'Tienes base para profundizar en agentes y workflows.'}
+  ]},
+  {q:'¿Qué esperas lograr con un programa de IA?',opts:[
+    {t:'Entender qué es IA y cómo usarla mejor.',s:{p10:4},sig:'Buscas fundamentos y claridad inicial.'},
+    {t:'Aprender herramientas de IA para mejorar mi productividad personal.',s:{p10:3},sig:'Buscas productividad con IA generativa.'},
+    {t:'Aprender a aplicar IA a problemas reales de mi trabajo.',s:{p10:2,p14:1},sig:'Buscas aplicación práctica con sentido de negocio.'},
+    {t:'Diseñar o implementar un agente/automatización funcional con impacto en un proceso.',s:{p14:5},sig:'Buscas construir una solución funcional con impacto.'},
+    {t:'Vivir una experiencia práctica e intensiva para salir con una automatización básica funcionando.',s:{bt:5},bt:true,sig:'Buscas una experiencia intensiva de automatización básica.'}
+  ]},
+  {q:'¿Qué tan dispuesto/a estás a construir, probar y equivocarte durante el programa?',opts:[
+    {t:'Prefiero aprender mirando ejemplos y explicaciones.',s:{p10:3},sig:'Prefieres una experiencia más guiada y conceptual.'},
+    {t:'Me gustaría practicar, pero no quiero algo muy técnico.',s:{p10:3},sig:'Buscas práctica, pero con baja complejidad técnica.'},
+    {t:'Estoy dispuesto/a a usar herramientas y crear prototipos guiados.',s:{p14:2},sig:'Tienes disposición a construir con acompañamiento.'},
+    {t:'Quiero construir, probar, iterar y llevarme algo funcional.',s:{p14:5},sig:'Buscas una experiencia de construcción e iteración.'}
+  ]},
+  {q:'¿Qué tan claro tienes un problema o proceso donde te gustaría aplicar IA?',opts:[
+    {t:'No tengo ninguno identificado todavía.',s:{p10:3},sig:'Necesitas trabajar primero en identificación de oportunidades.'},
+    {t:'Tengo una idea general, pero no está muy aterrizada.',s:{p10:3},sig:'Necesitas estructurar mejor tu caso de uso.'},
+    {t:'Tengo un proceso específico que me gustaría mejorar.',s:{p14:2},sig:'Ya tienes un foco potencial para automatizar.'},
+    {t:'Tengo un proceso claro, repetitivo y medible donde IA podría generar impacto.',s:{p14:4},sig:'Tienes un caso ideal para construir una solución funcional.'}
+  ]},
+  {q:'¿Cuál frase te representa mejor?',opts:[
+    {t:'Quiero empezar a entender la IA desde lo básico.',s:{p10:5},sig:'Buscas iniciar desde fundamentos.'},
+    {t:'Uso IA, pero aún necesito ordenar mis fundamentos.',s:{p10:4},sig:'Tienes uso inicial, pero necesitas estructura.'},
+    {t:'Ya uso IA y quiero aplicarla mejor a mi trabajo.',s:{p14:2},sig:'Estás listo/a para avanzar hacia mayor aplicación.'},
+    {t:'Quiero construir soluciones con IA que automaticen procesos reales.',s:{p14:5},sig:'Buscas construir soluciones funcionales con IA.'},
+    {t:'Quiero una experiencia corta y práctica para automatizar una tarea puntual.',s:{bt:5},bt:true,sig:'Buscas una experiencia breve, práctica e inmediata.'}
+  ]}
+];
+
+// ===== CONFIG GOOGLE SHEETS =====
+var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx8pRzEhuby1TvJvgImw3LavTLzR2pysM8OPpR3evL8KJOF08KtVsnB__32rHWprm6b5g/exec';
+var TOKEN = 'C23-IA-DIAGNOSTICO-2025';
+
+// ===== ESTADO =====
+var currentQ = 0;
+var answers = {};
+var userData = {nombre:'',email:'',empresa:'',cargo:'',consentimiento:false};
+var stepsBuilt = false;
+var lastPayload = null;
+
+// ===== NAVEGACIÓN =====
+function showView(id) {
+  document.querySelectorAll('.view').forEach(function(v){ v.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ===== MODAL PRODUCTOS =====
+function openModal(pid) {
+  var p = PRODUCTS[pid];
+  var learnHtml = p.learn.map(function(l){ return '<li>→ '+l+'</li>'; }).join('');
+  document.getElementById('modal-body').innerHTML =
+    '<div class="modal-tag" style="color:'+p.color+'">'+p.tag+'</div>'+
+    '<h3 style="color:'+p.color+'">'+p.name+'</h3>'+
+    '<p><strong style="color:var(--navy)">¿Para quién es?</strong><br>'+p.forWho+'</p>'+
+    '<p style="margin-top:10px"><strong style="color:var(--navy)">¿Qué aprenderás?</strong></p>'+
+    '<ul>'+learnHtml+'</ul>'+
+    '<div class="modal-block colored" style="border-left-color:'+p.color+'"><div class="modal-block-label" style="color:'+p.color+'">¿Qué construirás?</div><p style="margin:0">'+p.build+'</p></div>'+
+    '<div class="modal-block"><div class="modal-block-label" style="color:#9ca3af">¿Qué NO es?</div><p style="margin:0">'+p.notIs+'</p></div>';
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function openStepModal(i) {
+  var s = STEPS[i];
+  document.getElementById('modal-body').innerHTML =
+    '<div style="font-size:2.5rem;font-weight:900;color:'+s.progColor+';line-height:1;margin-bottom:4px">'+s.n+'</div>'+
+    '<h3 style="color:var(--navy);margin-bottom:4px">'+s.label+'</h3>'+
+    '<span style="display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 12px;border-radius:100px;background:'+s.progColor+'22;color:'+s.progColor+'">'+s.prog+'</span>'+
+    '<p style="margin-top:14px;font-weight:700;color:var(--navy)">'+s.subtitle+'</p>'+
+    '<p style="margin-top:6px">'+s.desc+'</p>'+
+    '<div class="modal-block colored" style="border-left-color:'+s.progColor+';margin-top:14px"><div class="modal-block-label" style="color:'+s.progColor+'">↓ Cómo inicias este nivel</div><p style="margin:0">'+s.entrada+'</p></div>'+
+    '<div class="modal-block" style="margin-top:10px"><div class="modal-block-label" style="color:#6b7280">→ Cómo sales de este nivel</div><p style="margin:0">'+s.salida+'</p></div>';
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function closeModal(e){ if(e.target===document.getElementById('modal-overlay')) closeModalForce(); }
+function closeModalForce(){ document.getElementById('modal-overlay').classList.remove('open'); }
+
+// ===== MAPA DE MADUREZ =====
+function buildSteps() {
+  if(stepsBuilt) return; stepsBuilt = true;
+  var track = document.getElementById('stepsTrack');
+  STEPS.forEach(function(s, i) {
+    var col = document.createElement('div');
+    col.className = 'step-col';
+    col.innerHTML =
+      '<div class="step-bar-wrap">'+
+        '<div class="step-label-top" style="color:'+s.progColor+'">'+s.label+'</div>'+
+        '<div class="step-bar" style="height:'+s.h+'px;background:'+s.grad+'">'+
+          '<span class="step-num">'+s.n+'</span>'+
+        '</div>'+
+      '</div>'+
+      '<div class="step-bottom-label">'+s.subtitle+'</div>';
+    (function(idx){ col.onclick = function(){ openStepModal(idx); }; })(i);
+    track.appendChild(col);
+  });
+}
+
+// ===== FORM =====
+function submitForm() {
+  var nombre  = document.getElementById('f-nombre').value.trim();
+  var email   = document.getElementById('f-email').value.trim();
+  var empresa = document.getElementById('f-empresa').value.trim();
+  var cargo   = document.getElementById('f-cargo').value.trim();
+  var consent = document.getElementById('f-consent').checked;
+  var ok = true;
+
+  document.getElementById('err-nombre').style.display='none';
+  document.getElementById('err-email').style.display='none';
+  document.getElementById('err-consent').style.display='none';
+  document.getElementById('f-nombre').classList.remove('error');
+  document.getElementById('f-email').classList.remove('error');
+
+  if(!nombre){ document.getElementById('err-nombre').style.display='block'; document.getElementById('f-nombre').classList.add('error'); ok=false; }
+  if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ document.getElementById('err-email').style.display='block'; document.getElementById('f-email').classList.add('error'); ok=false; }
+  if(!consent){ document.getElementById('err-consent').style.display='block'; ok=false; }
+  if(!ok) return;
+
+  userData = {nombre:nombre, email:email, empresa:empresa, cargo:cargo, consentimiento:true};
+  currentQ = 0;
+  answers = {};
+  renderQ();
+  showView('view-test');
+}
+
+// ===== QUIZ =====
+function renderQ() {
+  var q = QUESTIONS[currentQ];
+  var total = QUESTIONS.length;
+  var pct = Math.round(((currentQ+1)/total)*100);
+  document.getElementById('q-counter').textContent = 'Pregunta '+(currentQ+1)+' de '+total;
+  document.getElementById('q-pct').textContent = pct+'%';
+  document.getElementById('progress-fill').style.width = pct+'%';
+  document.getElementById('q-num').textContent = 'Pregunta '+(currentQ+1);
+  document.getElementById('q-text').textContent = q.q;
+
+  var ol = document.getElementById('options-list');
+  ol.innerHTML = '';
+  q.opts.forEach(function(o, i) {
+    var btn = document.createElement('button');
+    btn.className = 'option-btn' + (answers[currentQ]===i ? ' selected' : '');
+    btn.textContent = o.t;
+    btn.onclick = function(){ selectOpt(i); };
+    ol.appendChild(btn);
+  });
+
+  document.getElementById('btn-back').style.visibility = currentQ===0 ? 'hidden' : 'visible';
+  var nb = document.getElementById('btn-next');
+  nb.disabled = answers[currentQ]===undefined;
+  nb.textContent = currentQ===total-1 ? 'Ver mi resultado →' : 'Siguiente →';
+}
+
+function selectOpt(i) {
+  answers[currentQ] = i;
+  document.querySelectorAll('.option-btn').forEach(function(b, idx){ b.classList.toggle('selected', idx===i); });
+  document.getElementById('btn-next').disabled = false;
+}
+
+function nextQ() {
+  if(answers[currentQ]===undefined) return;
+  if(currentQ < QUESTIONS.length-1){ currentQ++; renderQ(); }
+  else { calcResult(); }
+}
+
+function prevQ() {
+  if(currentQ>0){ currentQ--; renderQ(); }
+}
+
+function restartTest() {
+  userData={nombre:'',email:'',empresa:'',cargo:'',consentimiento:false};
+  ['f-nombre','f-email','f-empresa','f-cargo'].forEach(function(id){ document.getElementById(id).value=''; });
+  document.getElementById('f-consent').checked=false;
+  showView('view-form');
+}
+
+// ===== SCORING =====
+function calcResult() {
+  var scores={p10:0,p14:0,bt:0};
+  var btSignals=0;
+  var signals=[];
+
+  QUESTIONS.forEach(function(q, qi) {
+    var ai = answers[qi];
+    if(ai===undefined) return;
+    var opt = q.opts[ai];
+    if(opt.s.p10) scores.p10 += opt.s.p10;
+    if(opt.s.p14) scores.p14 += opt.s.p14;
+    if(opt.s.bt)  scores.bt  += opt.s.bt;
+    if(opt.bt) btSignals++;
+    if(signals.length<5) signals.push(opt.sig);
+  });
+
+  var vt = scores.p10+scores.p14;
+  var r10p=50, r14p=50;
+  if(vt>0){ r10p=Math.round((scores.p10/vt)*100); r14p=100-r10p; }
+  var winner = scores.p14>scores.p10 ? 'p14' : 'p10';
+  var showBt = btSignals>=1 || scores.bt>=5;
+
+  // Armar payload para Google Sheets
+  var ansLabels = {};
+  QUESTIONS.forEach(function(q, qi){ if(answers[qi]!==undefined) ansLabels['P'+(qi+1)] = qi+'_'+answers[qi]; });
+
+  lastPayload = {
+    token: TOKEN,
+    nombre: userData.nombre,
+    email: userData.email,
+    empresa: userData.empresa,
+    cargo: userData.cargo,
+    ruta_recomendada: winner==='p14' ? 'AI Agent Building' : 'AI Tools & Tech Mindset',
+    ruta_secundaria: showBt ? 'Bootcamp Productividad Laboral con IA' : '',
+    match_rt10: r10p,
+    match_rt14: r14p,
+    match_bt: scores.bt,
+    score_rt10: scores.p10,
+    score_rt14: scores.p14,
+    score_bt: scores.bt,
+    signals: signals.join(' | '),
+    answers_json: JSON.stringify(ansLabels),
+    consentimiento: userData.consentimiento
+  };
+
+  showResult(winner, r10p, r14p, signals, showBt, btSignals, scores);
+  setSaveStatus('saving');
+  submitToSheets(lastPayload).then(function(r){ setSaveStatus(r.ok ? 'success' : 'failed'); });
+}
+
+// ===== RESULTADO =====
+function showResult(winner, r10p, r14p, signals, showBt, btSignals, scores) {
+  var isP14 = winner==='p14';
+  var color = isP14 ? '#1155FF' : '#7B3FF2';
+  var progName = isP14 ? 'AI Agent Building' : 'AI Tools & Tech Mindset';
+  var body = isP14
+    ? 'Tus respuestas muestran que ya tienes familiaridad con IA, puedes identificar oportunidades de mejora en procesos y buscas construir soluciones funcionales. El programa AI Agent Building te ayudará a pasar del uso de herramientas a la creación de agentes o workflows con impacto medible.'
+    : 'Tus respuestas indican que estás en una etapa ideal para ordenar fundamentos, ganar confianza con herramientas de IA generativa y convertir una oportunidad de negocio en una propuesta aplicable. El programa AI Tools & Tech Mindset te ayudará a pasar de la exploración al criterio estratégico.';
+  var devs = isP14
+    ? ['Mapeo de procesos automatizables.','Diseño de workflows y arquitectura de agentes.','Integración de herramientas.','Construcción de agentes o flujos funcionales.','Gobernanza, supervisión humana y medición de impacto.']
+    : ['Fundamentos de IA generativa.','Prompting y uso de herramientas.','Criterios para seleccionar herramientas.','Identificación de oportunidades.','Propuesta de innovación con IA.','Piloto inicial y gobernanza básica.'];
+
+  document.getElementById('result-hero').style.background = isP14
+    ? 'linear-gradient(135deg,#07004D,#031a5e,#041668)'
+    : 'linear-gradient(135deg,#07004D,#1a0060,#2a0070)';
+  document.getElementById('result-hero').innerHTML =
+    '<div class="result-badge" style="background:'+color+'33;color:#fff">Tu programa recomendado</div>'+
+    '<h2>Programa · '+progName+'</h2>'+
+    '<p style="font-size:.95rem;opacity:.78;max-width:520px;margin:16px auto 0;line-height:1.65">'+body+'</p>';
+
+  var sigHtml = signals.map(function(s){ return '<div class="signal-item"><div class="signal-dot" style="background:'+color+'"></div><span>'+s+'</span></div>'; }).join('');
+  var devHtml = devs.map(function(d){ return '<div class="signal-item"><div class="signal-dot" style="background:'+color+'"></div><span>'+d+'</span></div>'; }).join('');
+  var btBlock = showBt
+    ? '<div class="bt-card"><div class="bt-card-header"><div class="bt-icon">⚡</div><div>'+
+      '<div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#18a87a;margin-bottom:2px">Sugerencia complementaria</div>'+
+      '<h4>También podrías considerar el Bootcamp</h4></div></div>'+
+      '<p>Detectamos interés en una experiencia práctica e inmediata. El Bootcamp de Productividad Laboral con IA puede ser una buena alternativa para iniciarte rápidamente en automatización básica.'+(btSignals>=2?' <strong>Encaja bien con tu perfil.</strong>':'')+' Aun así, no reemplaza la profundidad ni la progresión de un programa completo.</p>'+
+      '<button class="btn-primary" style="padding:10px 24px;font-size:.85rem" onclick="showView(\'view-explore\')">Ver Bootcamp</button></div>'
+    : '';
+
+  document.getElementById('result-body').innerHTML =
+    '<div id="save-status-wrap"></div>'+
+    '<div class="result-main-card" style="border-top-color:'+color+'">'+
+      '<h3 style="color:'+color+'">Compatibilidad estimada</h3>'+
+      '<div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:.88rem;font-weight:700;margin-bottom:6px"><span>AI Tools & Tech Mindset</span><span>'+r10p+'%</span></div><div class="compare-track"><div class="compare-fill" id="bar10" style="width:0%;background:#7B3FF2"></div></div></div>'+
+      '<div><div style="display:flex;justify-content:space-between;font-size:.88rem;font-weight:700;margin-bottom:6px"><span>AI Agent Building</span><span>'+r14p+'%</span></div><div class="compare-track"><div class="compare-fill" id="bar14" style="width:0%;background:#1155FF"></div></div></div>'+
+    '</div>'+
+    '<div class="signals-card"><h4>🔍 Señales detectadas en tu perfil</h4>'+sigHtml+'</div>'+
+    '<div class="signals-card"><h4>¿Qué desarrollarás?</h4>'+devHtml+'</div>'+
+    btBlock+
+    '<div class="result-actions">'+
+      '<button class="btn-outline" onclick="showView(\'view-explore\')">← Volver a explorar</button>'+
+      '<button class="btn-primary" onclick="restartTest()">Reiniciar diagnóstico</button>'+
+    '</div>';
+
+  showView('view-result');
+  setTimeout(function(){
+    document.getElementById('bar10').style.width = r10p+'%';
+    document.getElementById('bar14').style.width = r14p+'%';
+  }, 400);
+}
+
+// ===== ENVÍO A GOOGLE SHEETS =====
+function submitToSheets(payload) {
+  var params = new URLSearchParams();
+  Object.keys(payload).forEach(function(k){ params.append(k, payload[k]); });
+  return fetch(APPS_SCRIPT_URL + '?' + params.toString())
+    .then(function(res){ return res.json(); })
+    .then(function(json){ return { ok: json.status === 'ok' }; })
+    .catch(function(err){ console.error('Error al guardar:', err); return { ok: false }; });
+}
+
+function setSaveStatus(state) {
+  var wrap = document.getElementById('save-status-wrap');
+  if(!wrap) return;
+  if(state==='saving'){
+    wrap.innerHTML='<div style="background:#fff;border-radius:14px;padding:14px 18px;box-shadow:0 4px 20px rgba(1,0,92,.08);margin-bottom:20px;display:flex;align-items:center;gap:12px;font-size:.85rem;border-left:4px solid #27B9FF"><div style="width:16px;height:16px;border:2px solid #e5e7eb;border-top-color:#27B9FF;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0"></div><div><strong style="display:block;margin-bottom:2px;color:var(--navy)">Guardando tu resultado…</strong><span style="color:var(--gray)">Estamos registrando tu diagnóstico.</span></div></div>';
+  } else if(state==='success'){
+    wrap.innerHTML='<div style="background:#fff;border-radius:14px;padding:14px 18px;box-shadow:0 4px 20px rgba(1,0,92,.08);margin-bottom:20px;display:flex;align-items:center;gap:12px;font-size:.85rem;border-left:4px solid #2EE6A6"><div style="font-size:1.2rem">✅</div><div><strong style="display:block;margin-bottom:2px;color:var(--navy)">Resultado guardado correctamente.</strong><span style="color:var(--gray)">Tu diagnóstico ha sido registrado con éxito.</span></div></div>';
+  } else {
+    wrap.innerHTML='<div style="background:#fff;border-radius:14px;padding:14px 18px;box-shadow:0 4px 20px rgba(1,0,92,.08);margin-bottom:20px;display:flex;align-items:center;gap:12px;font-size:.85rem;border-left:4px solid #ef4444"><div style="font-size:1.2rem">⚠️</div><div style="flex:1"><strong style="display:block;margin-bottom:2px;color:var(--navy)">No pudimos guardar automáticamente.</strong><span style="color:var(--gray)">Puedes tomar captura o reintentar.</span></div><button onclick="retrySubmit()" style="background:var(--bg);border:1px solid #d1d9f0;border-radius:50px;padding:6px 14px;font-size:.78rem;cursor:pointer;font-family:inherit;color:var(--navy);white-space:nowrap">Reintentar</button></div>';
+  }
+}
+
+function retrySubmit() {
+  if(!lastPayload) return;
+  setSaveStatus('saving');
+  submitToSheets(lastPayload).then(function(r){ setSaveStatus(r.ok ? 'success' : 'failed'); });
+}
+
+// ===== Init mapa al cargar explore =====
+document.addEventListener('DOMContentLoaded', function(){ buildSteps(); });
+</script>
+</body>
+</html>
