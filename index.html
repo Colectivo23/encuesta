@@ -740,10 +740,16 @@ function showResult(winner, r10p, r14p, signals, showBt, btSignals, scores) {
     '<div class="result-actions">'+actionsHtml+'</div>';
 
   showView('view-result');
+
+  // Primero mostrar la vista, luego enviar y animar
   setTimeout(function(){
-    document.getElementById('bar10').style.width = r10p+'%';
-    document.getElementById('bar14').style.width = r14p+'%';
-  }, 400);
+    setSaveStatus('saving');
+    submitToSheets(lastPayload).then(function(r){ setSaveStatus(r.ok ? 'success' : 'failed'); });
+    var b10 = document.getElementById('bar10');
+    var b14 = document.getElementById('bar14');
+    if(b10) b10.style.width = r10p+'%';
+    if(b14) b14.style.width = r14p+'%';
+  }, 300);
 }
 
 // ===== ENVÍO A GOOGLE SHEETS =====
