@@ -201,7 +201,7 @@ section{padding:80px 24px}
       <p class="section-sub">Haz clic en cada programa para conocer su foco, nivel de entrada y resultado esperado.</p>
       <div class="products-grid">
         <div class="pcard p10" onclick="openModal('p10')">
-          <span class="pcard-tag">Programa</span><div class="pcard-name">AI Tools &amp; Tech Mindset</div>
+          <span class="pcard-tag">Programa de especialización</span><div class="pcard-name">AI Tools for Business Strategy <span style="font-size:.78rem;font-weight:600;color:#9d87c9;margin-left:6px">64 hrs</span></div>
           <p>Entiende IA generativa, usa herramientas con criterio y diseña una propuesta de innovación aplicable.</p>
           <div class="pcard-meta">
             <div class="meta-row"><span class="meta-label">Nivel:</span><span class="meta-val">Cero base / Explorador</span></div>
@@ -223,7 +223,7 @@ section{padding:80px 24px}
           <div class="pcard-hint">Ver detalle →</div>
         </div>
         <div class="pcard p14" onclick="openModal('p14')">
-          <span class="pcard-tag">Programa</span><div class="pcard-name">AI Agent Building</div>
+          <span class="pcard-tag">Programa de especialización</span><div class="pcard-name">AI Agent Building <span style="font-size:.78rem;font-weight:600;color:#7b9fd4;margin-left:6px">66 hrs</span></div>
           <p>Diseña, prototipa e integra agentes de automatización en procesos reales con impacto medible.</p>
           <div class="pcard-meta">
             <div class="meta-row"><span class="meta-label">Nivel:</span><span class="meta-val">Usuario activo de IA / Explorador avanzado</span></div>
@@ -379,9 +379,9 @@ var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx8pRzEhuby1TvJvg
 var TOKEN = 'C23-IA-DIAGNOSTICO-2025';
 
 var PRODUCTS = {
-  p10:{tag:'Programa',name:'AI Tools & Tech Mindset',color:'#7B3FF2',forWho:'Profesionales de negocio, líderes o equipos que parten desde cero o nivel explorador en IA. Buscan entender la tecnología, usar herramientas generativas con criterio y formular una primera propuesta de innovación aplicable.',learn:['Entender fundamentos de IA generativa.','Crear prompts efectivos.','Usar herramientas de IA para idear, analizar y comunicar.','Priorizar oportunidades con impacto/esfuerzo.','Diseñar una propuesta de innovación con IA.'],build:'Una propuesta de innovación con IA que incluye problemática, solución, herramientas a usar, pequeño piloto y gobernanza básica.',notIs:'No es un programa para construir agentes funcionales complejos ni automatizaciones conectadas a procesos empresariales.'},
+  p10:{tag:'Programa de especialización',name:'AI Tools for Business Strategy',color:'#7B3FF2',forWho:'Profesionales de negocio, líderes o equipos que parten desde cero o nivel explorador en IA. Buscan entender la tecnología, usar herramientas generativas con criterio y formular una primera propuesta de innovación aplicable.',learn:['Entender fundamentos de IA generativa.','Crear prompts efectivos.','Usar herramientas de IA para idear, analizar y comunicar.','Priorizar oportunidades con impacto/esfuerzo.','Diseñar una propuesta de innovación con IA.'],build:'Una propuesta de innovación con IA que incluye problemática, solución, herramientas a usar, pequeño piloto y gobernanza básica.',notIs:'No es un programa para construir agentes funcionales complejos ni automatizaciones conectadas a procesos empresariales.'},
   bt:{tag:'Bootcamp',name:'Productividad Laboral con IA',color:'#18a87a',forWho:'Personas que buscan una experiencia corta, práctica e inmediata para aprender a construir una automatización básica con IA orientada a productividad individual.',learn:['Entender una lógica básica de automatización.','Usar n8n en un flujo guiado.','Conectar pasos simples.','Automatizar una tarea puntual.','Ganar confianza práctica rápidamente.'],build:'Una automatización básica funcional en n8n, construida sobre un caso de uso propuesto y guiado por Colectivo23.',notIs:'No reemplaza un programa completo. No profundiza en estrategia, gobernanza ni arquitectura de agentes.'},
-  p14:{tag:'Programa',name:'AI Agent Building',color:'#1155FF',forWho:'Profesionales que ya usan IA y quieren pasar de experimentar con herramientas a diseñar agentes integrados a flujos reales.',learn:['Identificar procesos automatizables.','Diseñar flujos y arquitectura de agentes.','Conectar herramientas, datos y pasos de proceso.','Construir agentes o workflows funcionales.','Medir impacto operativo y definir gobernanza.'],build:'Un agente de automatización o workflow funcional con IA. Cada grupo trabajará casos propuestos según sus perfiles como base de aprendizaje.',notIs:'No es una introducción básica a IA ni promete agentes autónomos avanzados o sistemas enterprise-grade.'}
+  p14:{tag:'Programa de especialización',name:'AI Agent Building',color:'#1155FF',forWho:'Profesionales que ya usan IA y quieren pasar de experimentar con herramientas a diseñar agentes integrados a flujos reales.',learn:['Identificar procesos automatizables.','Diseñar flujos y arquitectura de agentes.','Conectar herramientas, datos y pasos de proceso.','Construir agentes o workflows funcionales.','Medir impacto operativo y definir gobernanza.'],build:'Un agente de automatización o workflow funcional con IA. Cada grupo trabajará casos propuestos según sus perfiles como base de aprendizaje.',notIs:'No es una introducción básica a IA ni promete agentes autónomos avanzados o sistemas enterprise-grade.'}
 };
 
 var STEPS = [
@@ -432,7 +432,7 @@ function openModal(pid) {
     '<h3 style="color:'+p.color+'">'+p.name+'</h3>'+
     '<p><strong style="color:#01005C">Para quién es:</strong><br>'+p.forWho+'</p>'+
     '<p style="margin-top:10px"><strong style="color:#01005C">Qué aprenderás:</strong></p><ul>'+li+'</ul>'+
-    '<div class="modal-block" style="border-left-color:'+p.color+'"><div class="modal-block-label" style="color:'+p.color+'">Qué construirás</div><p style="margin:0">'+p.build+'</p></div>'+
+    '<div class="modal-block" style="border-left-color:'+p.color+'"><div class="modal-block-label" style="color:'+p.color+'">Qué desarrollarás en el programa</div><p style="margin:0">'+p.build+'</p></div>'+
     '<div class="modal-block"><div class="modal-block-label" style="color:#9ca3af">Qué NO es</div><p style="margin:0">'+p.notIs+'</p></div>';
   document.getElementById('modal-overlay').classList.add('open');
 }
@@ -592,7 +592,7 @@ function showResult(win, r10, r14, sigs, showBt, btSig) {
   var wLink  = isP14?LINKS.p14:LINKS.p10;
   var oLabel = isP14?'AI Tools for Business Strategy':'AI Agent Building';
   var oLink  = isP14?LINKS.p10:LINKS.p14;
-  var progName = isP14?'AI Agent Building':'AI Tools & Tech Mindset';
+  var progName = isP14?'AI Agent Building':'AI Tools for Business Strategy';
   var desc = isP14
     ?'Tus respuestas muestran que ya tienes familiaridad con IA y buscas construir soluciones funcionales. El programa AI Agent Building te ayudará a pasar del uso de herramientas a la creación de agentes o workflows con impacto medible.'
     :'Tus respuestas indican que estás en una etapa ideal para ordenar fundamentos y ganar confianza con herramientas de IA generativa. El programa AI Tools te ayudará a pasar de la exploración al criterio estratégico.';
