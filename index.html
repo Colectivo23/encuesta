@@ -185,7 +185,10 @@ section{padding:80px 24px}
     <div class="hero-badge">Diagnóstico de Programas IA</div>
     <h1>Descubre tu camino en Inteligencia Artificial</h1>
     <p>Explora las diferencias entre nuestros programas de IA y descubre cuál se ajusta mejor a tu nivel, objetivo y forma de aprender.</p>
-    <button class="btn-primary" onclick="document.querySelector('.explore-section').scrollIntoView({behavior:'smooth'})">Explorar programas ↓</button>
+    <div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-bottom:0">
+      <button class="btn-primary" onclick="document.querySelector('.explore-section').scrollIntoView({behavior:'smooth'})">Explorar programas ↓</button>
+      <button onclick="showView('view-form')" style="background:transparent;border:2px solid rgba(255,255,255,.5);border-radius:50px;padding:16px 40px;font-size:1rem;font-weight:700;color:#fff;cursor:pointer;font-family:inherit">Ir al diagnóstico →</button>
+    </div>
   </div>
   <nav>
     <div class="nav-logo">Colectivo<span>23</span></div>
@@ -299,6 +302,11 @@ section{padding:80px 24px}
           <label>Correo electrónico <span class="req">*</span></label>
           <input type="email" id="f-email" placeholder="Ej. ana@empresa.com">
           <div class="field-error" id="err-email">Por favor ingresa un email válido.</div>
+        </div>
+        <div class="form-row">
+          <label>Celular <span class="req">*</span></label>
+          <input type="tel" id="f-celular" placeholder="Ej. +51 999 999 999">
+          <div class="field-error" id="err-celular">Por favor ingresa tu número de celular.</div>
         </div>
         <div class="form-row">
           <label>Empresa u organización <span class="opt">(opcional)</span></label>
@@ -474,20 +482,24 @@ function buildSteps() {
 function submitForm() {
   var nombre  = document.getElementById('f-nombre').value.trim();
   var email   = document.getElementById('f-email').value.trim();
+  var celular = document.getElementById('f-celular').value.trim();
   var empresa = document.getElementById('f-empresa').value.trim();
   var cargo   = document.getElementById('f-cargo').value.trim();
   var consent = document.getElementById('f-consent').checked;
   var ok = true;
   document.getElementById('err-nombre').style.display='none';
   document.getElementById('err-email').style.display='none';
+  document.getElementById('err-celular').style.display='none';
   document.getElementById('err-consent').style.display='none';
   document.getElementById('f-nombre').classList.remove('error');
   document.getElementById('f-email').classList.remove('error');
+  document.getElementById('f-celular').classList.remove('error');
   if(!nombre){ document.getElementById('err-nombre').style.display='block'; document.getElementById('f-nombre').classList.add('error'); ok=false; }
   if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ document.getElementById('err-email').style.display='block'; document.getElementById('f-email').classList.add('error'); ok=false; }
+  if(!celular){ document.getElementById('err-celular').style.display='block'; document.getElementById('f-celular').classList.add('error'); ok=false; }
   if(!consent){ document.getElementById('err-consent').style.display='block'; ok=false; }
   if(!ok) return;
-  userData = {nombre:nombre,email:email,empresa:empresa,cargo:cargo,consentimiento:true};
+  userData = {nombre:nombre,email:email,celular:celular,empresa:empresa,cargo:cargo,consentimiento:true};
   currentQ = 0;
   answers = {};
   renderQ();
@@ -567,7 +579,7 @@ function calcResult() {
     if(answers[qi2]!==undefined) ans['P'+(qi2+1)] = answers[qi2];
   }
   lastPayload = {
-    token:TOKEN, nombre:userData.nombre, email:userData.email,
+    token:TOKEN, nombre:userData.nombre, email:userData.email, celular:userData.celular,
     empresa:userData.empresa, cargo:userData.cargo,
     ruta_recomendada: win==='p14'?'AI Agent Building':'AI Tools & Tech Mindset',
     ruta_secundaria: showBt?'Bootcamp Productividad Laboral con IA':'',
